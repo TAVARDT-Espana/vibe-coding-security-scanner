@@ -1,7 +1,5 @@
 # Vibe Coding Security Scanner y Auditor de Aplicaciones Generadas por IA | TAVARDT España
 
-[![Español (España) Online Scanner](https://img.shields.io/badge/Esc%C3%A1ner%20Online-Probar%20Aplicaci%C3%B3n-1e00ff.svg?style=for-the-badge)](https://tavardt-espana.github.io/vibe-coding-security-scanner/)
-
 [![Licence MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Vibe Coding Security](https://img.shields.io/badge/Vibe%20Coding-Security%20Hardened-00d26a.svg)](README.md)
 [![Language](https://img.shields.io/badge/Language-Español%20(España)-green.svg)](README.md)
@@ -9,7 +7,11 @@
 
 Escáner open source para auditar aplicaciones creadas mediante vibe coding (Cursor, Lovable, Bolt, v0). Detecta claves API expuestas en frontend, brechas de RLS en Supabase y sourcemaps públicos.
 
-Desarrollado y mantenido por el equipo de ingeniería de ciberseguridad de **[TAVARDT España](https://ag.tavardt.com/es/ciberseguridad/)**.
+## Aplicación Web Interactiva
+
+Acceda a la herramienta online y audite en tiempo real:
+
+- [https://tavardt-espana.github.io/vibe-coding-security-scanner/](https://tavardt-espana.github.io/vibe-coding-security-scanner/)
 
 ---
 
