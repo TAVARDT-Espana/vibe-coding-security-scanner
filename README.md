@@ -1,79 +1,58 @@
-# Vibe Coding Security Scanner y Auditor de Aplicaciones Generadas por IA | TAVARDT España
+# TAVARDT Vibe Coding Security & AI Architecture Auditor (España)
 
-[![Licence MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Vibe Coding Security](https://img.shields.io/badge/Vibe%20Coding-Security%20Hardened-00d26a.svg)](README.md)
-[![Language](https://img.shields.io/badge/Language-Español%20(España)-green.svg)](README.md)
-[![Engineering](https://img.shields.io/badge/TAVARDT-Cybersecurity-5b3cf5.svg)](https://ag.tavardt.com/es/ciberseguridad/)
+Guía corporativa de arquitectura defensiva, mitigación de fuga de credenciales y herramienta CLI determinista para auditoría de aplicaciones desarrolladas con herramientas de IA (Vibe Coding).
 
-Escáner open source para auditar aplicaciones creadas mediante vibe coding (Cursor, Lovable, Bolt, v0). Detecta claves API expuestas en frontend, brechas de RLS en Supabase y sourcemaps públicos.
+## Superficie de Riesgo en Aplicaciones Creadas con IA
 
-## Aplicación Web Interactiva
+El desarrollo asistido por IA (Cursor, Lovable, v0, Bolt) introduce tres vulnerabilidades estructurales recurrentes:
 
-Acceda a la herramienta online y audite en tiempo real:
+1. **Fuga de Sourcemaps (.js.map):** Despliegues en producción que conservan mapas de código activos permiten reconstruir íntegramente la lógica de negocio y esquemas de datos originales en TypeScript.
+2. **Exposición de Claves de IA en Bundles Client-Side:** Claves de OpenAI, Anthropic o tokens `service_role` de Supabase con prefijo `NEXT_PUBLIC_` o `VITE_` se descargan en el código estático por cualquier navegador.
+3. **Ausencia de Row Level Security (RLS):** Bases de datos relacionales consultadas directamente mediante endpoints REST/GraphQL sin políticas de RLS activas permiten la extracción no autorizada de datos de múltiples usuarios.
 
-- [https://tavardt-espana.github.io/vibe-coding-security-scanner/](https://tavardt-espana.github.io/vibe-coding-security-scanner/)
+***
 
----
+## Herramienta Oficial de Auditoría CLI
 
-## 1. Visión General del Escáner de Seguridad Vibe Coding
-
-El auge del desarrollo acelerado con inteligencia artificial (*vibe coding*) permite construir y publicar aplicaciones en minutos mediante **Cursor, Lovable.dev, Bolt.new, v0 y Replit**.
-
-Sin embargo, la falta de revisión arquitectónica expone con frecuencia secretos de producción, bases de datos abiertas a cualquier usuario y código fuente sin compilar.
-
-Este repositorio proporciona un escáner en Python para auditar **el perímetro público de cualquier aplicación web en producción**, detectando riesgos críticos de forma determinista.
-
----
-
-## 2. Vulnerabilidades y Vectores Auditados
-
-| Vector de Riesgo | Causa en Vibe Coding | Impacto Técnico |
-| :--- | :--- | :--- |
-| **Claves API en Frontend** | Desarrolladores ubican claves privadas de OpenAI (`sk-...`), Stripe o AWS en el `.env` del cliente. | Cualquier visitante extrae la clave desde DevTools y consume su saldo contratado. |
-| **Supabase RLS Desactivado** | Se crean tablas en Supabase sin habilitar *Row Level Security* (RLS). | La `anon_key` pública permite consultar o vaciar tablas completas vía REST. |
-| **Sourcemaps en Producción** | El compilador publica archivos `.js.map` en el hosting web. | El código fuente original completo queda expuesto para descarga pública. |
-| **Archivos Sensibles Abiertos** | Configuraciones erróneas dejan rutas como `/.env` o `/.git/HEAD` públicas. | Filtración total de variables de entorno y secretos de infraestructura. |
-| **Falta de Cabeceras Seguras** | Ausencia de directivas CSP, HSTS y X-Frame-Options. | Vulnerabilidad ante Clickjacking e inyecciones de código malicioso. |
-
----
-
-## 3. Guía de Instalación y Ejecución
-
-### Instalación Rápida
+Para evitar restricciones de sandbox de navegadores y políticas de CORS, TAVARDT ofrece una utilidad en Python para inspección directa por terminal o pipeline de CI/CD:
 
 ```bash
-git clone https://github.com/TAVARDT-Espana/vibe-coding-security-scanner.git
-cd vibe-coding-security-scanner
+# 1. Obtener el script oficial
+curl -sO https://raw.githubusercontent.com/TAVARDT-Espana/vibe-coding-security-scanner/main/audit_vibe_security.py
+
+# 2. Ejecutar auditoria directa contra la aplicacion
+python audit_vibe_security.py https://su-aplicacion.com
 ```
 
-### Ejecutar Escaneo en una URL
+### Capacidades de Inspección del Utilitario CLI
 
-```bash
-python scanner.py https://su-aplicacion.vercel.app
-```
+* **Auditoría de Sourcemaps:** Rastreo sistemático en directorios de compilación estándar para detectar archivos `.js.map` expuestos públicamente.
+* **Inspección de Cabeceras HTTP:** Validación estricta de políticas `Content-Security-Policy`, `Strict-Transport-Security`, `X-Content-Type-Options` y `X-Frame-Options`.
+* **Detección de Secretos Compilados:** Escaneo avanzado con expresiones regulares para localizar tokens de proveedores de IA y credenciales administrativas en bundles estáticos.
 
-### Parámetros Disponibles
+***
 
-```bash
-# Salida en formato JSON estructurado
-python scanner.py https://su-aplicacion.vercel.app --json
+## Blueprints de Mitigación Defensiva
 
-# Omitir análisis de sourcemaps
-python scanner.py https://su-aplicacion.vercel.app --no-sourcemaps
-```
+El repositorio incluye plantillas técnicas homologadas para blindar su arquitectura:
 
----
+* **Vite (`vite.config.ts`):** Desactivación estricta de sourcemaps en producción y sanitización de nombres de paquetes.
+* **Next.js (`next.config.js`):** Desactivación de `productionBrowserSourceMaps` e imposición de cabeceras defensivas.
+* **Supabase SQL (`supabase-rls.sql`):** Activación obligatoria de `ROW LEVEL SECURITY` en esquemas públicos y revocación de permisos indiscriminados del rol `anon`.
+* **Cloudflare WAF:** Reglas perimetrales para bloquear inmediatamente peticiones hacia archivos `.js.map`, `.env` y `.git`.
 
-## 4. Blindaje Profesional y Soporte Técnico
+***
 
-Si su diagnóstico reveló credenciales expuestas, tablas sin RLS en Supabase/Firebase o requiere blindaje perimetral:
+## Marcos de Cumplimiento y Estándares
 
-* **Portal Corporativo:** [TAVARDT España](https://ag.tavardt.com/es/ciberseguridad/)
-* **Contacto Técnico Directo:** [Contactar con el Equipo de Ingeniería](https://ag.tavardt.com/es/contacto/)
+Arquitectura defensiva y controles de ciberseguridad alineados con el ENS, RGPD, CCN-CERT y estándares Zero Trust.
 
----
+***
 
-## Licencia
+## Repositorio y Documentación Oficial
 
-Distribuido bajo licencia de código abierto MIT. Consulte el archivo [`LICENSE`](LICENSE) para más detalles.  
-Copyright (c) 2026 TAVARDT España.
+* **Página Oficial:** [https://tavardt-espana.github.io/vibe-coding-security-scanner/](https://tavardt-espana.github.io/vibe-coding-security-scanner/)
+* **Portal TAVARDT:** [https://ag.tavardt.com/es/](https://ag.tavardt.com/es/)
+* **Herramientas de Ciberseguridad:** [https://tools.tavardt.com/es/](https://tools.tavardt.com/es/)
+
+&copy; 2026 TAVARDT. Todos los derechos reservados.
