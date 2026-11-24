@@ -54,14 +54,4 @@ Arquitectura defensiva y controles de ciberseguridad alineados con el ENS, RGPD,
 
 ***
 
-## Repositorio y Documentación Oficial
-
-* **Página Oficial:** [https://tavardt-espana.github.io/vibe-coding-security-scanner/](https://tavardt-espana.github.io/vibe-coding-security-scanner/)
-* **Portal TAVARDT:** [Portal Institucional](https://ag.tavardt.com/es/)
-* **Herramientas:** [Central de Ferramentas](https://tools.tavardt.com/es/)
-
-&copy; 2026 TAVARDT. Todos los derechos reservados.
-
-***
-
 © 2026 TAVARDT. Todos los derechos reservados.
