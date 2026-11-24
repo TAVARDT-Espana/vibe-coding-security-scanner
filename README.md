@@ -54,4 +54,12 @@ Arquitectura defensiva y controles de ciberseguridad alineados con el ENS, RGPD,
 
 ***
 
+## Enlaces Útiles
+
+* **Portal Corporativo:** https://ag.tavardt.com/es/
+* **Suite de Diagnósticos:** https://tools.tavardt.com/es/
+* **Contacto Técnico:** https://ag.tavardt.com/es/contacto/
+
+***
+
 © 2026 TAVARDT. Todos los derechos reservados.
